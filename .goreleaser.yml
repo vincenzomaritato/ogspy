@@ -1,0 +1,45 @@
+# Reproducible, signed releases — Goreleaser ≥ 0.195
+project_name: ogspy
+release:
+  github:
+    owner: vincenzomaritato
+    name: ogspy
+    draft: false # publish immediately
+
+builds:
+  - id: ogspy-static
+    env: [CGO_ENABLED=0]
+    ldflags:
+      - -s -w
+      - -X main.__version__={{.Tag}}
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    goarm: [7]
+    binary: ogspy
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+archives:
+  - id: default
+    builds: [ogspy-static]
+    format: tar.gz
+    files: [LICENSE, README.md]
+    replacements: { darwin: macOS }
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+signs: # Sigstore / cosign detached signatures
+  - artifacts: archive
+    command: cosign
+    args: [sign-blob, "--output-signature", "${signature}", "${artifact}"]
+    env: [COSIGN_EXPERIMENTAL=1]
+
+slsa:
+  enabled: true
+  provenance:
+    id: golang
+    uri: https://github.com/{{ .ProjectName }}/releases/download/{{ .Version }}
+
+snapshot:
+  name_template: "snapshot-{{ .Commit }}"
