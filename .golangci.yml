@@ -1,0 +1,54 @@
+# ---------------------------------------------------------------------------
+# GolangCI-Lint configuration — v1.56+
+# Docs: https://golangci-lint.run/usage/configuration/
+# ---------------------------------------------------------------------------
+run:
+  timeout: 5m
+  concurrency: 4
+  tests: true
+  modules-download-mode: readonly
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+  govet:
+    enable:
+      - fieldalignment
+  staticcheck:
+    checks: ["all"]
+  revive:
+    ignore-generated-header: true
+    rules:
+      - name: indent-error-flow
+        severity: warning
+      - name: dot-imports
+        severity: warning
+  unused:
+    check-exported: true
+  gocyclo:
+    min-complexity: 15
+
+linters:
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - revive
+    - unused
+    - gocyclo
+    - gofmt
+    - goimports
+
+issues:
+  max-same-issues: 0
+  max-issues-per-linter: 0
+  exclude-use-default: false
+  exclude-rules:
+    - linters:
+        - gocyclo
+      text: "is high cyclomatic complexity"
+
+output:
+  format: colored-line-number
+  severity:
+    default-severity: error

@@ -1,0 +1,23 @@
+# ── Go toolchain ───────────────────────────────────────────
+/bin/
+/dist/
+/coverage/
+/profile.out
+*.test
+*.prof
+*.cov
+
+# ── Dependency / build artifacts ───────────────────────────
+/vendor/
+/.gomodcache/
+/pkg/
+/.cache/
+/tmp/
+/.idea/
+/.vscode/
+
+# ── OS / editor cruft ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
